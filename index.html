@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>اختبار نادي المهارات الرقمية التوعوي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0c1a24; --bg2:#12252f; --card:#10262f; --line:#2a3f4d;
+    --text:#e9eef2; --muted:#9fb1bd; --alert:#ff6f61; --ok:#4aa3df; --inner:#32313c;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%}
+  body{
+    font-family:"IBM Plex Sans Arabic",Tahoma,system-ui,sans-serif;
+    background:radial-gradient(circle at 80% 0,#16323d 0,var(--bg) 55%) fixed;
+    color:var(--text); line-height:1.9;
+    display:flex; justify-content:center; padding:24px 16px;
+    padding-top:max(24px,env(safe-area-inset-top));
+    padding-bottom:max(24px,env(safe-area-inset-bottom));
+  }
+  .card{
+    width:100%; max-width:520px; background:var(--card);
+    border:1px solid var(--line); border-radius:36px;
+    padding:36px 28px; text-align:center; align-self:flex-start;
+  }
+  .icon{font-size:72px; line-height:1.2}
+  h1{margin:8px 0 6px; font-size:28px; font-weight:700}
+  p{margin:0 0 16px; color:var(--muted); font-size:17px}
+  form{text-align:right; margin-top:20px}
+  label{display:block; font-size:15px; color:var(--muted); margin:14px 0 6px}
+  input{
+    width:100%; padding:14px 16px; font:inherit; font-size:17px;
+    color:var(--text); background:var(--bg2);
+    border:1px solid var(--line); border-radius:16px;
+  }
+  input:focus-visible,button:focus-visible{outline:3px solid var(--ok); outline-offset:2px}
+  button{
+    width:100%; margin-top:24px; padding:15px; font:inherit; font-size:18px; font-weight:700;
+    color:#08141b; background:var(--ok); border:0; border-radius:16px; cursor:pointer;
+  }
+  .note{font-size:13px; margin-top:18px; text-align:center}
+  .hidden{display:none}
+
+  /* alert screen */
+  .tag{color:var(--alert); font-weight:500; font-size:17px; margin:0}
+  .alert h1{color:var(--alert); font-size:30px; margin-top:14px}
+  .alert p b{color:#fff}
+  .loot{
+    margin:26px 0 22px; padding:20px 22px; text-align:right;
+    background:var(--inner); border:2px solid var(--alert); border-radius:28px;
+  }
+  .loot h2{margin:0 0 12px; color:var(--alert); font-size:16px; font-weight:700}
+  .row{display:flex; justify-content:space-between; align-items:center; gap:12px; padding:12px 0}
+  .row + .row{border-top:2px dashed #4b4a57}
+  .row span{color:var(--muted); font-size:15px}
+  .row strong{font-size:24px; font-weight:700; word-break:break-all}
+  .tips{list-style:none; padding:0; margin:0; text-align:right}
+  .tips li{display:flex; gap:12px; align-items:flex-start; padding:8px 0; font-size:17px}
+  .tips li::before{content:"✔"; color:var(--ok); font-weight:700; flex:none}
+  .again{background:transparent; color:var(--muted); border:1px solid var(--line); font-size:16px; font-weight:500}
+  @media (prefers-reduced-motion:no-preference){
+    .alert:not(.hidden) .loot{animation:pop .45s ease-out}
+    @keyframes pop{from{transform:scale(.94);opacity:0}to{transform:none;opacity:1}}
+  }
+</style>
+</head>
+<body>
+
+<main class="card" id="login">
+  <div class="icon">🔐</div>
+  <h1>اختبار نادي المهارات الرقمية</h1>
+  <p>سجّل بياناتك للدخول إلى رابط الدعوة.</p>
+  <form id="form" autocomplete="off">
+    <label for="name">الاسم</label>
+    <input id="name" name="name" type="text" required maxlength="40" placeholder="اكتب اسمك">
+    <label for="badge">رقم الجوال</label>
+    <input id="badge" name="badge" type="tel" inputmode="tel" required maxlength="15" placeholder="مثال: 05xxxxxxxx">
+    <button type="submit">دخول</button>
+  </form>
+</main>
+
+<main class="card alert hidden" id="result" aria-live="polite">
+  <div class="icon">🔓</div>
+  <p class="tag">تنبيه أمني</p>
+  <h1 id="title">هكرناااك!</h1>
+  <p>دخلت رابط ما تعرف مصدره وكتبت معلوماتك على طول. لو كان <b>هجوم احتيال حقيقي</b>، كانت بياناتك بيد المحتال الحين.</p>
+
+  <section class="loot">
+    <h2>🚨 البيانات اللي «سُرِقت» منك الحين:</h2>
+    <div class="row"><span>الاسم</span><strong id="outName"></strong></div>
+    <div class="row"><span>رقم الجوال</span><strong id="outBadge"></strong></div>
+  </section>
+
+  <ul class="tips">
+    <li>تأكد من مصدر أي رابط قبل ما تفتحه أو تدخل فيه</li>
+    <li>لا تكتب بياناتك الشخصية أو الوظيفية في صفحة ما تعرف صاحبها</li>
+    <li>انتبه لعنوان الموقع: الروابط المشبوهة غالباً تقلّد أسماء معروفة</li>
+    <li>إذا شككت في رسالة، اسأل الجهة الرسمية مباشرة</li>
+  </ul>
+  <p class="note">هذا اختبار توعوي، ولم تُرسل بياناتك لأي جهة ولم يتم حفظها.</p>
+  <button class="again" id="again" type="button">رجوع</button>
+</main>
+
+<script>
+  // كل شيء يتم داخل المتصفح فقط، لا يوجد إرسال أو تخزين للبيانات.
+  var login = document.getElementById('login');
+  var result = document.getElementById('result');
+  document.getElementById('form').addEventListener('submit', function(e){
+    e.preventDefault();
+    var name = document.getElementById('name').value.trim();
+    var badge = document.getElementById('badge').value.trim();
+    document.getElementById('outName').textContent = name;
+    document.getElementById('outBadge').textContent = badge;
+    document.getElementById('title').textContent = 'هكرناااك يا ' + name + '!';
+    login.classList.add('hidden');
+    result.classList.remove('hidden');
+    window.scrollTo(0, 0);
+  });
+  document.getElementById('again').addEventListener('click', function(){
+    document.getElementById('form').reset();
+    result.classList.add('hidden');
+    login.classList.remove('hidden');
+  });
+</script>
+</body>
+</html>
